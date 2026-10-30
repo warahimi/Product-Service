@@ -22,16 +22,15 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     // Constructor injection
-    public ProductServiceImpl(
-            ProductRepository productRepository
-    ) {
+    public ProductServiceImpl(ProductRepository productRepository)
+    {
         this.productRepository = productRepository;
     }
 
     @Override
     @Transactional
-    public ProductResponse create(ProductRequest request) {
-
+    public ProductResponse create(ProductRequest request)
+    {
         if (productRepository.existsBySku(request.sku())) {
             throw new ProductConflictException(
                     "Product SKU already exists: " + request.sku()
@@ -54,7 +53,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public ProductResponse getById(Long id) {
-
         Product product = findProduct(id);
         return ProductMapper.toResponse(product);
     }
@@ -62,17 +60,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public Page<ProductResponse> getAll(Pageable pageable) {
-
         return productRepository.findAll(pageable)
                 .map(ProductMapper::toResponse);
     }
 
     @Override
     @Transactional
-    public ProductResponse update(
-            Long id,
-            UpdateProductRequest request
-    ) {
+    public ProductResponse update(Long id,UpdateProductRequest request)
+    {
         Product product = findProduct(id);
 
         if (!Objects.equals(
